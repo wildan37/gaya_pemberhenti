@@ -1,28 +1,30 @@
 #!/bin/bash
 
-#PBS -l nodes=2:ppn=64,walltime=8:00:00
-#PBS -q laser                                         #name of the queue (default, laser, etc.)
+#PBS -l nodes=4:ppn=64,walltime=36:00:00
+#PBS -q laser                   #name of the queue (default, laser, etc.)
 #PBS -V
-#PBS -m ae -M w.abdussalam@hzdr.de           #your email address
-#PBS -N tddft_B_h                            #name of job 
+#PBS -m ae -M wildan.abdussalam@mailbox.tu-dresden.de      #your email address
+#PBS -N tddft_B_h                       #name of job 
 #PBS -e tddft_B_h.$PBS_JOBID.err         #name of error file
 #PBS -o tddft_B_h.$PBS_JOBID.out         #name of out file
 
 . /etc/profile.modules
-#module purge
+module purge
+module load infiniband/1.0.0
 module load gcc/4.8.2 
 module load libxc/2.0.2
-module load python/2.7.10
-export GPAW_SETUP_PATH=/bigdata/hplsim/production/gpaw-ase/gpaw-setups-0.9.20000/
+#module load libxc/4.0.4
+#module load python/3.6.2
+module load python/3.4.3
+#export GPAW_SETUP_PATH=/opt/pkg/devel/python/3.4.3/lib/python3.4/site-packages/paw-dataset/gpaw-setups-0.9.20000/
+export GPAW_SETUP_PATH=/bigdata/hplsim/production/gpaw-ase/gpaw-setups-0.9.20000
 module load openmpi/1.8.0 
-#module load lapack/3.5.0 
-#module load blas/1.0 
-#module load fftw/3.3.7
-#module load gsl/2.3 
+module load scalapack/2.0.2
+module load fftw/3.3.7
 
 HOMEDIR=/bigdata/hplsim/production/nu_urang/aluminum_output/runfiles
 TARGETDIR=/bigdata/hplsim/production/nu_urang/aluminum_output/outfiles
-PARAMETERS=(0 0)
+PARAMETERS=(0 0 0)
 
 cd ${HOMEDIR}
 #EXEC=./md_al_fcc.py
@@ -33,7 +35,7 @@ cd ${HOMEDIR}
 EXEC=tddft_ehrenfest.py
 PAR=mpirun
 PY=gpaw-python
-NOPAR=(128)
+NOPAR=(256)
 
 echo ${HOMEDIR}
 hostname

@@ -29,6 +29,7 @@ for i in range(0, Nparams):
 #m = k[0]
 #n = k[1]
 #a = 6.246666  # fcc lattice parameter
+Temp = k[0]
 rd.seed(k[1])
 r = rd.random() * 0.77
 k2 = k[1] + 100
@@ -38,18 +39,18 @@ Natoms = 12
 Nproj = 1
 Ntot = Natoms + Nproj
 print (k, r, r1)
-
-name = 'boron_tetra_h_run%d' %(k[1])
+ef = Temp/11604.52500617
+name = 'boron_tetra_h_lsnap_T%dK_run%d' %(k[0], k[1])
 filename = name + '.txt' 
 f = open (filename, "w")
-name_input = 'bor_real_struc'
+name_input = 'boron_tetra_h_lsnap_T%dK' %(k[0])
 bulk = io.read(name_input + '.xyz')
 bulk.append ( Atom('H', (0.9, r1, r) ) )
 cell = [[2.454000, -1.416818, 4.188530],
         [0.000000,  2.833635, 4.188530],
         [-2.454000,-1.416818, 4.188530]
         ]
-
+print(Temp, ef)
 #cell = [[a, 0, 0],
 #        [0, a, 0],
 #        [0, 0, a]
@@ -67,9 +68,9 @@ const_pot = ConstantPotential(1.0)
 
 calc = GPAW( gpts = h2gpts(0.1, bulk.get_cell(), idiv=16),
 	     xc = 'LDA',
-	     occupations = FermiDirac (width=0.05),
+	     occupations = FermiDirac (width=ef),
 	     txt = name + '.txt',
-	     nbands = 20,
+	     nbands = 30,
 	     charge = 1,
 	     convergence=conv_fast,
 	     external=const_pot,

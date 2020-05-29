@@ -30,23 +30,23 @@ for k in ks:
             filename_submit = 'submit_E%.1f_run%d_T%dK.sh' % (k, run, T)
             buildSubmit(filename_submit, k, run, T)
             os.system('/opt/torque/bin/qsub ' + filename_submit)
-            i+=1
-            wait = True
-            if i % Njobs_sub == 0:
-                while(wait):
-                    return_string = subprocess.Popen("/opt/torque/bin/qstat | grep 'Q' | grep 'abduss38' | wc -l",
-                                                    shell=True, stdout=subprocess.PIPE).communicate()
-                    waiting_jobs = int(np.fromstring(return_string[0], sep='\n')[0])
-                    return_string = subprocess.Popen("/opt/torque/bin/qstat | grep 'R' | grep 'abduss38' | wc -l",
-                                                    shell=True, stdout=subprocess.PIPE).communicate()
-                    running_jobs = int(np.fromstring(return_string[0], sep='\n')[0])
-
-                    # consider also qtop
-                    #subprocess.Popen("qtop | grep 'jobs running of'", shell=True, stdout=subprocess.PIPE).communicate()
-                    jobs_in_queue_total = running_jobs + waiting_jobs
-                    if jobs_in_queue_total < Njobs_lim:
-                        wait = False
-                    else:
-                        print '\n', "Waiting 64 s before continuing job submission ... since total jobs = %d" %(jobs_in_queue_total), '\n'
-                        time.sleep(64)
+#            i+=1
+#            wait = True
+#            if i % Njobs_sub == 0:
+#                while(wait):
+#                    return_string = subprocess.Popen("/opt/torque/bin/qstat | grep 'Q' | grep 'abduss38' | wc -l",
+#                                                    shell=True, stdout=subprocess.PIPE).communicate()
+#                    waiting_jobs = int(np.fromstring(return_string[0], sep='\n')[0])
+#                    return_string = subprocess.Popen("/opt/torque/bin/qstat | grep 'R' | grep 'abduss38' | wc -l",
+#                                                    shell=True, stdout=subprocess.PIPE).communicate()
+#                    running_jobs = int(np.fromstring(return_string[0], sep='\n')[0])
+#
+#                    # consider also qtop
+#                    #subprocess.Popen("qtop | grep 'jobs running of'", shell=True, stdout=subprocess.PIPE).communicate()
+#                    jobs_in_queue_total = running_jobs + waiting_jobs
+#                    if jobs_in_queue_total < Njobs_lim:
+#                        wait = False
+#                    else:
+#                        print '\n', "Waiting 64 s before continuing job submission ... since total jobs = %d" %(jobs_in_queue_total), '\n'
+#                        time.sleep(64)
 
